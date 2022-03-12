@@ -47,9 +47,8 @@ for (const channel of listChannels.channels) {
     const localBalanceMsats = parseInt(channel.local_balance) * 1000
     const chanInfo = lncli(`getchaninfo ${channel.chan_id}`)
     const policy = getPolicy(chanInfo)
-    const maxHtlcMsat = getMaxHtlcMsat(chanInfo)
 
-    if (maxHtlcMsat > UPPER_BOUND * localBalanceMsats || maxHtlcMsat < LOWER_BOUND * localBalanceMsats) {
+    if (policy.maxHtlcMsat > UPPER_BOUND * localBalanceMsats || policy.maxHtlcMsat < LOWER_BOUND * localBalanceMsats) {
         resetMaxHtlc(policy, localBalanceMsats / 2)
     }
 
