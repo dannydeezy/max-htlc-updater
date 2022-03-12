@@ -19,12 +19,12 @@ const nodeInfo = lncli('getinfo')
 
 function getPolicy(chanInfo) {
     if (chanInfo.node1_pub === nodeInfo.identity_pubkey) {
-        chanInfo.node1_policy
+        return chanInfo.node1_policy
     }
     if (chanInfo.node2_pub === nodeInfo.identity_pubkey) {
-        chanInfo.node2_policy
+        return chanInfo.node2_policy
     }
-    throw new Error(`Unexpected channel info. Expected to see pubkey ${chanInfo.identity_pubkey} but found ${chanInfo.node1_pub} and ${chanInfo.node2_pub}`)
+    throw new Error(`Unexpected channel info. Expected to see pubkey ${nodeInfo.identity_pubkey} but found ${chanInfo.node1_pub} and ${chanInfo.node2_pub}`)
 }
 
 
