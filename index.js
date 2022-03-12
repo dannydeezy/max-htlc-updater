@@ -30,12 +30,12 @@ function getPolicy(chanInfo) {
 
 const listChannels = lncli('listchannels')
 
-function withExisting(policy) {
-    return `--base_fee ${policy.fee_base_msat} --fee_rate ${policy.fee_rate_milli_msat / 1000000.0} --time_lock_delta ${policy.time_lock_delta} ${policy.chan_point}`
+function withExisting(channelPoint, policy) {
+    return `--base_fee ${policy.fee_base_msat} --fee_rate ${policy.fee_rate_milli_msat / 1000000.0} --time_lock_delta ${policy.time_lock_delta} ${channelPoint}`
 }
 
-function resetMaxHtlc(policy, newMaxHtlcMsat) {
-    const command = `updatechanpolicy --max_htlc_msat ${newMaxHtlcMsat} ${withExisting(policy)}`
+function resetMaxHtlc(channelPoint, policy, newMaxHtlcMsat) {
+    const command = `updatechanpolicy --max_htlc_msat ${newMaxHtlcMsat} ${withExisting(channelPoint, policy)}`
     console.log(`Running: ${command}`)
     if (!DRY_RUN) {
         const response = lncli(command)
@@ -50,7 +50,7 @@ for (const channel of listChannels.channels) {
 
     console.log(`channel ${chanInfo.channel_id}, maxHtlcMsat: ${policy.max_htlc_msat}, localBalanceMsats: ${localBalanceMsats}`)
     if (policy.max_htlc_msat > UPPER_BOUND * localBalanceMsats || policy.max_htlc_msat < LOWER_BOUND * localBalanceMsats) {
-        resetMaxHtlc(policy, localBalanceMsats / 2)
+        resetMaxHtlc(chanInfo.chan_point, policy, localBalanceMsats / 2)
     }
 
 
