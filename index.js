@@ -1,5 +1,7 @@
 const child_process = require('child_process')
 
+const LNCLI = `/home/ubuntu/lnd/lncli`
+
 const DRY_RUN = process.argv.length > 2 && process.argv[2] == '--dry-run'
 
 if (DRY_RUN) {
@@ -10,7 +12,7 @@ const UPPER_BOUND = 0.9
 const LOWER_BOUND = 0.1
 
 function lncli(command) {
-    return JSON.parse(child_process.execSync(`lncli ${command}`))
+    return JSON.parse(child_process.execSync(`${LNCLI} ${command}`))
 }
 
 const nodeInfo = lncli('getinfo')
