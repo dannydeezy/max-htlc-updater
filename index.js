@@ -1,5 +1,11 @@
 const child_process = require('child_process')
 
+const DRY_RUN = process.argv.length > 2 && process.argv[2] == '--dry-run'
+
+if (DRY_RUN) {
+    console.log(`\n~ DRY RUN ~\n`)
+}
+
 const UPPER_BOUND = 0.9
 const LOWER_BOUND = 0.1
 
@@ -27,8 +33,12 @@ function withExisting(policy) {
 }
 
 function resetMaxHtlc(policy, newMaxHtlcMsat) {
-    const response = lncli(`updatechanpolicy --max_htlc_msat ${newMaxHtlcMsat} ${withExisting(policy)}`)
-    console.log(response)
+    const command = `updatechanpolicy --max_htlc_msat ${newMaxHtlcMsat} ${withExisting(policy)}`
+    console.log(`Running: ${command}`)
+    if (!DRY_RUN) {
+        const response = lncli(command)
+        console.log(response)
+    }
 }
 
 for (const channel of listChannels.channels) {
