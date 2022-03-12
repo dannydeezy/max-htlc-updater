@@ -31,7 +31,7 @@ function getPolicy(chanInfo) {
 const listChannels = lncli('listchannels')
 
 function withExisting(channelPoint, policy) {
-    return `--base_fee ${policy.fee_base_msat} --fee_rate ${policy.fee_rate_milli_msat / 1000000.0} --time_lock_delta ${policy.time_lock_delta} ${channelPoint}`
+    return `--base_fee_msat ${policy.fee_base_msat} --fee_rate ${policy.fee_rate_milli_msat / 1000000.0} --time_lock_delta ${policy.time_lock_delta} ${channelPoint}`
 }
 
 function resetMaxHtlc(channelPoint, policy, newMaxHtlcMsat) {
